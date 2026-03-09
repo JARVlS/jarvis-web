@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getPiStatus } from "../services/pi";
-import { getWorkstationHealth } from "../services/workstation";
+import { getPiStatus } from "../services/pi.js";
+import { getWorkstationHealth } from "../services/workstation.js";
 
 const router = Router();
 

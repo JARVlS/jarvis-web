@@ -1,10 +1,8 @@
-import "./env";
-
 import express from "express";
-import chatRouter from "./routes/chat";
-import powerRouter from "./routes/power";
-import statusRouter from "./routes/status";
-import { HOST, PORT } from "./env";
+import chatRouter from "./routes/chat.js";
+import powerRouter from "./routes/power.js";
+import statusRouter from "./routes/status.js";
+import { HOST, PORT } from "./env.js";
 
 const app = express();
 

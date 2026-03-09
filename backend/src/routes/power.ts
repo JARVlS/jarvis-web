@@ -3,7 +3,7 @@ import {
   wakeWorkstation,
   sleepWorkstation,
   shutdownWorkstation,
-} from "../services/pi";
+} from "../services/pi.js";
 
 const router = Router();
 

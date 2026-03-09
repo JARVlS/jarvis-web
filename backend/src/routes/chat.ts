@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sendChat } from "../services/workstation";
+import { sendChat } from "../services/workstation.js";
 
 const router = Router();
 
