@@ -23,7 +23,7 @@ jobs:
         run: |
           ssh "${{ secrets.HETZNER_USER }}@${{ secrets.HETZNER_HOST }}" << 'EOF'
             set -e
-            cd /opt/jarvis/app
+            cd /jarvis-web/
             git pull origin main
             docker compose up -d --build
           EOF

@@ -1,5 +1,7 @@
 const WORKSTATION_URL = process.env.WORKSTATION_URL || "http://jarvis:8000";
 
+console.log(`Using workstation URL: ${WORKSTATION_URL}`);
+
 export async function sendChat(message: string, sessionId?: string) {
   const response = await fetch(`${WORKSTATION_URL}/chat`, {
     method: "POST",
