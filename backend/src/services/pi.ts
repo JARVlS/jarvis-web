@@ -1,6 +1,4 @@
-const PI_URL = process.env.PI_URL!;
-const PI_API_TOKEN = process.env.PI_API_TOKEN!;
-
+import { PI_API_TOKEN, PI_URL } from "../env";
 
 async function post(path: string) {
   const response = await fetch(`${PI_URL}${path}`, {

@@ -1,4 +1,4 @@
-const WORKSTATION_URL = process.env.WORKSTATION_URL || "http://jarvis:8000";
+import { WORKSTATION_URL } from "../env";
 
 console.log(`Using workstation URL: ${WORKSTATION_URL}`);
 

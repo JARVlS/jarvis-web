@@ -1,71 +1,79 @@
 :root {
-  /* Color Variables */
-  --color-text-primary: #e0e6f0;
-  --color-bg-gradient-start: #0d1117;
-  --color-bg-gradient-mid: #111922;
-  --color-bg-gradient-end: #161d2a;
-  --color-card-bg: #1c2433de;
-  --color-card-border: #2a3548;
-  --color-eyebrow: #7b9ff0;
-  --color-heading: #c8d6f0;
-  --color-subtitle: #8896ad;
-  --color-error-border: #6b2a28;
-  --color-error-bg: #2d1413;
-  --color-error-text: #f4a3a0;
+  /* ── Accent palette (cyan primary / amber complementary) ── */
+  --accent-primary: #00d4ff;
+  --accent-primary-dim: #0098c8;
+  --accent-primary-glow: rgba(0, 212, 255, 0.15);
+  --accent-complement: #ff9f1c;
+  --accent-complement-dim: #cc7a00;
+  --accent-complement-glow: rgba(255, 159, 28, 0.12);
+
+  /* ── Core palette ── */
+  --color-text-primary: #eaf2ff;
+  --color-bg-gradient-start: #060a12;
+  --color-bg-gradient-mid: #0a1018;
+  --color-bg-gradient-end: #0e1520;
+  --color-card-bg: #0f1724de;
+  --color-card-border: #1a3050;
+  --color-eyebrow: var(--accent-primary);
+  --color-heading: #ffffff;
+  --color-subtitle: #8ea4c4;
+  --color-error-border: #8b2020;
+  --color-error-bg: #1e0a0a;
+  --color-error-text: #ff7b7b;
 
   /* Section titles */
-  --color-section-title: #a0b4d0;
+  --color-section-title: var(--accent-complement);
 
   /* Chat */
-  --color-chat-bg: #1c2433;
-  --color-chat-border: #2a3548;
-  --color-chat-clear-bg: #1a2436;
-  --color-chat-clear-border: #2e3e56;
-  --color-chat-clear-text: #b0c0da;
-  --color-chat-history-bg-start: #141c28;
-  --color-chat-history-bg-end: #161e2c;
-  --color-chat-history-border: #253044;
-  --color-chat-empty: #62708b;
-  --color-chat-msg-user-bg: #1a2744;
-  --color-chat-msg-user-border: #2a4070;
-  --color-chat-msg-assistant-bg: #1a2e20;
-  --color-chat-msg-assistant-border: #2a5038;
-  --color-chat-msg-system-bg: #2e1a1a;
-  --color-chat-msg-system-border: #5a2828;
-  --color-chat-meta: #7889a6;
-  --color-chat-body: #d0daf0;
-  --color-chat-input-border: #2e3e56;
-  --color-chat-input-bg: #141c28;
-  --color-chat-input-text: #e0e6f0;
-  --color-chat-input-disabled-bg: #111822;
-  --color-chat-send-bg: #2a5cd8;
-  --color-chat-send-text: #ffffff;
-  --color-chat-hint: #6880a0;
+  --color-chat-bg: #0c1422;
+  --color-chat-border: #163050;
+  --color-chat-clear-bg: #0e1828;
+  --color-chat-clear-border: #1a3a5e;
+  --color-chat-clear-text: #8eb8e0;
+  --color-chat-history-bg-start: #080e18;
+  --color-chat-history-bg-end: #0a1220;
+  --color-chat-history-border: #16304e;
+  --color-chat-empty: #4a6080;
+  --color-chat-msg-user-bg: #0c1e3e;
+  --color-chat-msg-user-border: #1050a0;
+  --color-chat-msg-assistant-bg: #081e12;
+  --color-chat-msg-assistant-border: #10603a;
+  --color-chat-msg-system-bg: #1e0c0c;
+  --color-chat-msg-system-border: #802020;
+  --color-chat-meta: #6888b0;
+  --color-chat-body: #e0eaff;
+  --color-chat-input-border: #1a3a5e;
+  --color-chat-input-bg: #080e18;
+  --color-chat-input-text: #eaf2ff;
+  --color-chat-input-disabled-bg: #060a10;
+  --color-chat-send-bg: var(--accent-primary);
+  --color-chat-send-text: #060a12;
+  --color-chat-hint: #5878a0;
 
   /* Power controls */
-  --color-power-card-bg: #1c2433;
-  --color-power-card-border: #2a3548;
-  --color-power-wake-bg: #152818;
-  --color-power-wake-text: #4ddb80;
-  --color-power-wake-border: #265a34;
-  --color-power-sleep-bg: #2a2410;
-  --color-power-sleep-text: #e0b840;
-  --color-power-sleep-border: #5a4a1a;
-  --color-power-shutdown-bg: #2e1616;
-  --color-power-shutdown-text: #f08080;
-  --color-power-shutdown-border: #5a2828;
+  --color-power-card-bg: #0c1422;
+  --color-power-card-border: #163050;
+  --color-power-wake-bg: #082010;
+  --color-power-wake-text: #00ff88;
+  --color-power-wake-border: #10804a;
+  --color-power-sleep-bg: #1e1800;
+  --color-power-sleep-text: var(--accent-complement);
+  --color-power-sleep-border: #806000;
+  --color-power-shutdown-bg: #200808;
+  --color-power-shutdown-text: #ff5050;
+  --color-power-shutdown-border: #a02020;
 
   /* Status indicator */
-  --color-status-card-bg: #1c2433;
-  --color-status-card-border: #2a3548;
-  --color-status-online: #2dd67a;
-  --color-status-offline: #f04040;
-  --color-status-checking: #f0b020;
-  --color-status-text: #d0daf0;
-  --color-status-meta: #6880a0;
+  --color-status-card-bg: #0c1422;
+  --color-status-card-border: #163050;
+  --color-status-online: #00ff88;
+  --color-status-offline: #ff4050;
+  --color-status-checking: var(--accent-complement);
+  --color-status-text: #e0eaff;
+  --color-status-meta: #5878a0;
 
   /* Misc */
-  --color-muted: #6880a0;
+  --color-muted: #5878a0;
 
   font-family: "Segoe UI", "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -107,6 +115,7 @@ body {
   border: 1px solid var(--color-card-border);
   border-radius: 14px;
   padding: 1.1rem 1.1rem 1rem;
+  box-shadow: 0 0 20px var(--accent-primary-glow), inset 0 1px 0 rgba(0, 212, 255, 0.06);
 }
 
 .eyebrow {
@@ -116,12 +125,14 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--color-eyebrow);
+  text-shadow: 0 0 12px var(--accent-primary-glow);
 }
 
 .app-header h1 {
   margin: 0.15rem 0 0;
   font-size: clamp(1.5rem, 2.2vw, 2rem);
   color: var(--color-heading);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.08);
 }
 
 .subtitle {
@@ -142,6 +153,7 @@ body {
   border-radius: 10px;
   padding: 0.65rem 0.75rem;
   color: var(--color-error-text);
+  box-shadow: 0 0 12px rgba(255, 80, 80, 0.1);
 }
 
 @media (max-width: 760px) {

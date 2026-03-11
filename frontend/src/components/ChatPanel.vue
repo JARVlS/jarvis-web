@@ -92,6 +92,7 @@ watch(
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  box-shadow: 0 0 20px var(--accent-primary-glow), inset 0 1px 0 rgba(0, 212, 255, 0.05);
 }
 
 .chat-header {
@@ -118,6 +119,13 @@ watch(
   padding: 0.45rem 0.7rem;
   font-size: 0.82rem;
   cursor: pointer;
+  transition: border-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
+}
+
+.history-clear:not(:disabled):hover {
+  border-color: var(--accent-complement-dim);
+  color: var(--accent-complement);
+  box-shadow: 0 0 8px var(--accent-complement-glow);
 }
 
 .history-clear:disabled {
@@ -153,16 +161,19 @@ watch(
 .role-user {
   background: var(--color-chat-msg-user-bg);
   border: 1px solid var(--color-chat-msg-user-border);
+  box-shadow: inset 2px 0 0 var(--accent-primary-dim);
 }
 
 .role-assistant {
   background: var(--color-chat-msg-assistant-bg);
   border: 1px solid var(--color-chat-msg-assistant-border);
+  box-shadow: inset 2px 0 0 #10804a;
 }
 
 .role-system {
   background: var(--color-chat-msg-system-bg);
   border: 1px solid var(--color-chat-msg-system-border);
+  box-shadow: inset 2px 0 0 var(--accent-complement-dim);
 }
 
 .message-meta {
@@ -195,6 +206,13 @@ watch(
   font-size: 0.97rem;
   background: var(--color-chat-input-bg);
   color: var(--color-chat-input-text);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.chat-input:focus {
+  outline: none;
+  border-color: var(--accent-primary-dim);
+  box-shadow: 0 0 10px var(--accent-primary-glow);
 }
 
 .chat-input:disabled {
@@ -210,6 +228,12 @@ watch(
   padding: 0.65rem 1rem;
   font-weight: 600;
   cursor: pointer;
+  transition: box-shadow 150ms ease, transform 120ms ease;
+}
+
+.send-button:not(:disabled):hover {
+  box-shadow: 0 0 14px var(--accent-primary-glow), 0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
 }
 
 .send-button:disabled {

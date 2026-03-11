@@ -47,6 +47,7 @@ const checkedLabel = computed(() => {
   border-radius: 12px;
   background: var(--color-status-card-bg);
   padding: 0.9rem 1rem;
+  box-shadow: 0 0 16px var(--accent-primary-glow), inset 0 1px 0 rgba(0, 212, 255, 0.04);
 }
 
 .status-row {
@@ -60,7 +61,7 @@ const checkedLabel = computed(() => {
   height: 11px;
   border-radius: 999px;
   display: inline-block;
-  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 20%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 20%, transparent), 0 0 10px currentColor;
 }
 
 .status-dot.is-online {

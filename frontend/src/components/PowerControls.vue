@@ -50,6 +50,7 @@ function handleClick(action: PowerAction) {
   border-radius: 12px;
   background: var(--color-power-card-bg);
   padding: 1rem;
+  box-shadow: 0 0 16px var(--accent-complement-glow), inset 0 1px 0 rgba(255, 159, 28, 0.04);
 }
 
 .section-title {
@@ -74,6 +75,7 @@ function handleClick(action: PowerAction) {
   font-weight: 600;
   cursor: pointer;
   transition: transform 120ms ease, opacity 120ms ease, box-shadow 120ms ease;
+  text-shadow: 0 0 10px currentColor;
 }
 
 .power-button:disabled {
@@ -91,15 +93,27 @@ function handleClick(action: PowerAction) {
   box-shadow: inset 0 0 0 1px var(--color-power-wake-border);
 }
 
+.power-wake:not(:disabled):hover {
+  box-shadow: inset 0 0 0 1px var(--color-power-wake-border), 0 0 14px rgba(0, 255, 136, 0.2);
+}
+
 .power-sleep {
   background: var(--color-power-sleep-bg);
   color: var(--color-power-sleep-text);
   box-shadow: inset 0 0 0 1px var(--color-power-sleep-border);
 }
 
+.power-sleep:not(:disabled):hover {
+  box-shadow: inset 0 0 0 1px var(--color-power-sleep-border), 0 0 14px var(--accent-complement-glow);
+}
+
 .power-shutdown {
   background: var(--color-power-shutdown-bg);
   color: var(--color-power-shutdown-text);
   box-shadow: inset 0 0 0 1px var(--color-power-shutdown-border);
+}
+
+.power-shutdown:not(:disabled):hover {
+  box-shadow: inset 0 0 0 1px var(--color-power-shutdown-border), 0 0 14px rgba(255, 80, 80, 0.2);
 }
 </style>
