@@ -1,79 +1,155 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Color Variables */
+  --color-text-primary: #e0e6f0;
+  --color-bg-gradient-start: #0d1117;
+  --color-bg-gradient-mid: #111922;
+  --color-bg-gradient-end: #161d2a;
+  --color-card-bg: #1c2433de;
+  --color-card-border: #2a3548;
+  --color-eyebrow: #7b9ff0;
+  --color-heading: #c8d6f0;
+  --color-subtitle: #8896ad;
+  --color-error-border: #6b2a28;
+  --color-error-bg: #2d1413;
+  --color-error-text: #f4a3a0;
+
+  /* Section titles */
+  --color-section-title: #a0b4d0;
+
+  /* Chat */
+  --color-chat-bg: #1c2433;
+  --color-chat-border: #2a3548;
+  --color-chat-clear-bg: #1a2436;
+  --color-chat-clear-border: #2e3e56;
+  --color-chat-clear-text: #b0c0da;
+  --color-chat-history-bg-start: #141c28;
+  --color-chat-history-bg-end: #161e2c;
+  --color-chat-history-border: #253044;
+  --color-chat-empty: #62708b;
+  --color-chat-msg-user-bg: #1a2744;
+  --color-chat-msg-user-border: #2a4070;
+  --color-chat-msg-assistant-bg: #1a2e20;
+  --color-chat-msg-assistant-border: #2a5038;
+  --color-chat-msg-system-bg: #2e1a1a;
+  --color-chat-msg-system-border: #5a2828;
+  --color-chat-meta: #7889a6;
+  --color-chat-body: #d0daf0;
+  --color-chat-input-border: #2e3e56;
+  --color-chat-input-bg: #141c28;
+  --color-chat-input-text: #e0e6f0;
+  --color-chat-input-disabled-bg: #111822;
+  --color-chat-send-bg: #2a5cd8;
+  --color-chat-send-text: #ffffff;
+  --color-chat-hint: #6880a0;
+
+  /* Power controls */
+  --color-power-card-bg: #1c2433;
+  --color-power-card-border: #2a3548;
+  --color-power-wake-bg: #152818;
+  --color-power-wake-text: #4ddb80;
+  --color-power-wake-border: #265a34;
+  --color-power-sleep-bg: #2a2410;
+  --color-power-sleep-text: #e0b840;
+  --color-power-sleep-border: #5a4a1a;
+  --color-power-shutdown-bg: #2e1616;
+  --color-power-shutdown-text: #f08080;
+  --color-power-shutdown-border: #5a2828;
+
+  /* Status indicator */
+  --color-status-card-bg: #1c2433;
+  --color-status-card-border: #2a3548;
+  --color-status-online: #2dd67a;
+  --color-status-offline: #f04040;
+  --color-status-checking: #f0b020;
+  --color-status-text: #d0daf0;
+  --color-status-meta: #6880a0;
+
+  /* Misc */
+  --color-muted: #6880a0;
+
+  font-family: "Segoe UI", "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color: var(--color-text-primary);
+  background: radial-gradient(circle at top right, var(--color-bg-gradient-start), var(--color-bg-gradient-mid) 40%, var(--color-bg-gradient-end) 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-.card {
-  padding: 2em;
-}
-
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  min-height: 100vh;
+  padding: 1.5rem;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.app-shell {
+  max-width: 920px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.app-header {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: 14px;
+  padding: 1.1rem 1.1rem 1rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-eyebrow);
+}
+
+.app-header h1 {
+  margin: 0.15rem 0 0;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  color: var(--color-heading);
+}
+
+.subtitle {
+  margin: 0.45rem 0 0;
+  color: var(--color-subtitle);
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.error-banner {
+  margin: 0;
+  border: 1px solid var(--color-error-border);
+  background: var(--color-error-bg);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  color: var(--color-error-text);
+}
+
+@media (max-width: 760px) {
+  #app {
+    padding: 1rem;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+
+  .controls-grid {
+    grid-template-columns: 1fr;
   }
 }
