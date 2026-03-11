@@ -1,4 +1,4 @@
-import { WORKSTATION_URL } from "../env";
+import { WORKSTATION_URL } from "../env.js";
 
 console.log(`Using workstation URL: ${WORKSTATION_URL}`);
 

@@ -1,4 +1,4 @@
-import { PI_API_TOKEN, PI_URL } from "../env";
+import { PI_API_TOKEN, PI_URL } from "../env.js";
 
 async function post(path: string) {
   const response = await fetch(`${PI_URL}${path}`, {
