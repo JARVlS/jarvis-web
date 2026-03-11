@@ -35,7 +35,7 @@ const checkedLabel = computed(() => {
   <section class="status-card">
     <div class="status-row">
       <span class="status-dot" :class="`is-${status}`" aria-hidden="true"></span>
-      <p class="status-text">Workstation {{ statusLabel }}</p>
+      <p class="status-text">J.A.R.V.I.S. {{ statusLabel }}</p>
     </div>
     <p class="status-meta">{{ checkedLabel }}</p>
   </section>

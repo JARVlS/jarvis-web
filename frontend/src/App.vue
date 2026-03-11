@@ -206,7 +206,7 @@ watch(sessionId, (nextValue) => {
       />
     </section>
 
-    <p v-if="uiError" class="error-banner">{{ uiError }}</p>
+    <p v-if="uiError" class="error-banner">Server Error: {{ uiError }}</p>
 
     <ChatPanel
       :messages="chatHistory"
