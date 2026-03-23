@@ -58,10 +58,12 @@ router.get("/login", async (req, res) => {
   console.log("Login requested");
   try {
     const redirectTo = await buildLoginRedirect(req.session);
+    console.log("redirectTo =", redirectTo);
+
     await saveSession(req);
     res.redirect(302, redirectTo);
   } catch (error) {
-    console.error(error);
+    console.error("login error:", error);
     res.status(500).json({ error: "Unable to start login" });
   }
 });
