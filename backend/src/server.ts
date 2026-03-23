@@ -3,33 +3,10 @@ import chatRouter from "./routes/chat.js";
 import powerRouter from "./routes/power.js";
 import statusRouter from "./routes/status.js";
 import { HOST, PORT } from "./env.js";
-import session from "express-session";
-import cors from "cors";
-import dotenv from "dotenv";
-import { Issuer } from "openid-client";
 
-dotenv.config();
 
 const app = express();
 
-app.use(express.json());
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
-}));
-
-app.use(session({
-  name: "jarvis_session",
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-  },
-}));
 
 const apiRouter = express.Router();
 apiRouter.use("/chat", chatRouter);
