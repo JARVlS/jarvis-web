@@ -18,3 +18,8 @@ services:
       - "127.0.0.1:8000:8000"
     environment:
       - PORT=8000
+    volumes:
+      - jarvis-backend-data:/app/data
+
+volumes:
+  jarvis-backend-data:

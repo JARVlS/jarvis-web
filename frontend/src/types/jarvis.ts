@@ -34,3 +34,18 @@ export interface ChatResponse {
   sessionId?: string;
   [key: string]: unknown;
 }
+
+export interface CurrentUser {
+  user_id: number;
+  email: string;
+  display_name: string | null;
+  roles: string[];
+  scopes: string[];
+  private_rag_namespace: string;
+  shared_rag_namespaces: string[];
+}
+
+export interface CurrentUserResponse {
+  authenticated: true;
+  user: CurrentUser;
+}

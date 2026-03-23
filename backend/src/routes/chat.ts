@@ -6,12 +6,17 @@ const router = Router();
 router.post("/", async (req, res) => {
   try {
     const { message, sessionId } = req.body;
+    const userContext = req.userContext;
 
     if (!message || typeof message !== "string") {
       return res.status(400).json({ error: "message is required" });
     }
 
-    const result = await sendChat(message, sessionId);
+    if (!userContext) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+
+    const result = await sendChat(message, userContext, sessionId);
     res.json(result);
   } catch (error) {
     console.error(error);
