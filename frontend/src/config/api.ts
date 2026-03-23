@@ -1,5 +1,5 @@
 const rawApiBase =
-  import.meta.env.VITE_API_BASE || (import.meta.env.DEV ? '/api' : '/jarvis/api')
+  import.meta.env.VITE_API_BASE || (import.meta.env.DEV ? '/api' : '/api')
 const normalizedBase = rawApiBase.startsWith('/') ? rawApiBase : `/${rawApiBase}`
 const API_BASE = normalizedBase.replace(/\/+$/, '')
 
