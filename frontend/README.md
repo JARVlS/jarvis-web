@@ -6,7 +6,7 @@ Copy `.env.example` to `.env` (or set environment variables in Docker):
 
 - `VITE_API_BASE` defaults to:
 - `/api` during local development
-- `/jarvis/api` for production builds
+- `/api` for production builds
 
 Only variables prefixed with `VITE_` are exposed to the browser. Do not place secrets in frontend env files.
 
@@ -18,9 +18,9 @@ Only variables prefixed with `VITE_` are exposed to the browser. Do not place se
 
 ## Nginx Notes
 
-Set Vite base to `/jarvis/` (already configured in `vite.config.ts`) and ensure your reverse proxy serves:
+Set Vite base to `/` (already configured in `vite.config.ts`) and ensure your reverse proxy serves:
 
-- `/jarvis/` to frontend container
-- `/jarvis/api/` to backend container
+- `/` to frontend container
+- `/api/` to backend container
 
-If you add Vue Router HTML5 history routes later, configure fallback to `index.html` for `/jarvis/*` so direct navigation to nested routes works.
+If you add Vue Router HTML5 history routes later, configure fallback to `index.html` for `/` so direct navigation to nested routes works.

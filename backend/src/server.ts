@@ -20,7 +20,7 @@ apiRouter.get("/health", (_req, res) => {
 // Mount in multiple base paths to support common Nginx proxy_pass styles.
 app.use("/", apiRouter);
 app.use("/api", apiRouter);
-app.use("/jarvis/api", apiRouter);
+// app.use("/jarvis/api", apiRouter);
 
 app.listen(PORT, HOST, () => {
   console.log(`Jarvis backend running on ${HOST}:${PORT}`);
