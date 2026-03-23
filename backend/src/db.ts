@@ -13,7 +13,13 @@ export const db = new DatabaseSync(DATABASE_PATH, {
   timeout: 5_000,
 });
 
+let isDatabaseInitialized = false;
+
 export function initializeDatabase() {
+  if (isDatabaseInitialized) {
+    return;
+  }
+
   db.exec(`
     PRAGMA journal_mode = WAL;
 
@@ -75,4 +81,8 @@ export function initializeDatabase() {
       updated_at TEXT NOT NULL
     ) STRICT;
   `);
+
+  isDatabaseInitialized = true;
 }
+
+initializeDatabase();
