@@ -55,6 +55,7 @@ function getRequestUrl(req: Request) {
 }
 
 router.get("/login", async (req, res) => {
+  console.log("Login requested");
   try {
     const redirectTo = await buildLoginRedirect(req.session);
     await saveSession(req);
