@@ -31,12 +31,6 @@ async function getOidcConfiguration() {
   if (!oidcConfigurationPromise) {
     console.log("OIDC issuer runtime =", NORMALIZED_OIDC_ISSUER);
 
-    console.log("OIDC_CLIENT_ID =", JSON.stringify(OIDC_CLIENT_ID));
-    console.log("OIDC_CLIENT_SECRET length =", OIDC_CLIENT_SECRET?.length);
-    console.log("OIDC_CLIENT_SECRET starts =", OIDC_CLIENT_SECRET?.slice(0, 4));
-    console.log("OIDC_CLIENT_SECRET ends =", OIDC_CLIENT_SECRET?.slice(-4));
-    console.log("OIDC_REDIRECT_URI =", JSON.stringify(OIDC_REDIRECT_URI));
-
     oidcConfigurationPromise = client.discovery(
       new URL(NORMALIZED_OIDC_ISSUER),
       OIDC_CLIENT_ID,

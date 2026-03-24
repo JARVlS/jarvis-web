@@ -73,6 +73,8 @@ router.get("/callback", async (req, res) => {
     const profile = await handleOidcCallback(getRequestUrl(req), req.session);
     delete req.session.oidc;
 
+    console.log("OIDC login successful, profile =", profile);
+
     const user = upsertOidcUser(profile);
 
     await regenerateSession(req);
