@@ -57,7 +57,6 @@ function getRequestUrl(req: Request) {
 router.get("/login", async (req, res) => {
   console.log("Login requested");
   try {
-    console.log("Session =", req.session);
     const redirectTo = await buildLoginRedirect(req.session);
 
     await saveSession(req);
@@ -69,12 +68,9 @@ router.get("/login", async (req, res) => {
 });
 
 router.get("/callback", async (req, res) => {
-  console.log("OIDC callback requested");
   try {
     const profile = await handleOidcCallback(getRequestUrl(req), req.session);
     delete req.session.oidc;
-
-    console.log("OIDC login successful, profile =", profile);
 
     const user = upsertOidcUser(profile);
 
@@ -90,6 +86,7 @@ router.get("/callback", async (req, res) => {
 });
 
 router.post("/logout", async (req, res) => {
+  console.log("Logout requested for user_id =", req.session.auth?.user_id);
   try {
     await destroySession(req);
     res.clearCookie(SESSION_COOKIE_NAME, {

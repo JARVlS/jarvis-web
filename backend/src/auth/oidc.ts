@@ -29,7 +29,6 @@ function getClaimString(...values: unknown[]) {
 
 async function getOidcConfiguration() {
   if (!oidcConfigurationPromise) {
-    console.log("OIDC issuer runtime =", NORMALIZED_OIDC_ISSUER);
 
     oidcConfigurationPromise = client.discovery(
       new URL(NORMALIZED_OIDC_ISSUER),
@@ -84,7 +83,6 @@ export async function handleOidcCallback(
   }
 
   const config = await getOidcConfiguration();
-  console.log("config: ", config.clientMetadata().client_id);
   const tokens = await client.authorizationCodeGrant(
     config,
     currentUrl,
