@@ -84,7 +84,7 @@ export async function handleOidcCallback(
   }
 
   const config = await getOidcConfiguration();
-  console.log("config: ", config);
+  console.log("config: ", config.clientMetadata);
   const tokens = await client.authorizationCodeGrant(
     config,
     currentUrl,
