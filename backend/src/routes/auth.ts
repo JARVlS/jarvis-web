@@ -69,6 +69,7 @@ router.get("/login", async (req, res) => {
 });
 
 router.get("/callback", async (req, res) => {
+  console.log("OIDC callback requested");
   try {
     const profile = await handleOidcCallback(getRequestUrl(req), req.session);
     delete req.session.oidc;
