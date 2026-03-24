@@ -39,7 +39,7 @@ async function getOidcConfiguration() {
         redirect_uris: [OIDC_REDIRECT_URI],
         response_types: ["code"],
       },
-      client.ClientSecretBasic(OIDC_CLIENT_SECRET),
+      client.ClientSecretPost(OIDC_CLIENT_SECRET),
     );
   }
 
@@ -84,6 +84,7 @@ export async function handleOidcCallback(
   }
 
   const config = await getOidcConfiguration();
+  console.log("config: ", config)
   const tokens = await client.authorizationCodeGrant(
     config,
     currentUrl,
