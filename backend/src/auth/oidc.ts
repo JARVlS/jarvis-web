@@ -13,6 +13,10 @@ const OIDC_SCOPE = "openid profile email";
 
 let oidcConfigurationPromise: Promise<client.Configuration> | undefined;
 
+const NORMALIZED_OIDC_ISSUER = OIDC_ISSUER.trim().endsWith("/")
+  ? OIDC_ISSUER.trim()
+  : `${OIDC_ISSUER.trim()}/`;
+
 function getClaimString(...values: unknown[]) {
   for (const value of values) {
     if (typeof value === "string" && value.trim()) {
@@ -25,8 +29,10 @@ function getClaimString(...values: unknown[]) {
 
 async function getOidcConfiguration() {
   if (!oidcConfigurationPromise) {
+    console.log("OIDC issuer runtime =", NORMALIZED_OIDC_ISSUER);
+
     oidcConfigurationPromise = client.discovery(
-      new URL(OIDC_ISSUER),
+      new URL(NORMALIZED_OIDC_ISSUER),
       OIDC_CLIENT_ID,
       {
         client_secret: OIDC_CLIENT_SECRET,
