@@ -72,15 +72,6 @@ export async function fetchCurrentUser(): Promise<CurrentUserResponse | null> {
 export function beginLogin() {
   window.location.assign(authUrl("/auth/login"));
 }
-
 export async function logout(): Promise<void> {
-  const response = await fetch(authUrl("/auth/logout"), {
-    method: "POST",
-    credentials: "include",
-  });
-
-  if (!response.ok) {
-    const body = (await response.json().catch(() => null)) as unknown;
-    throw new Error(getErrorMessage(body) ?? `${response.status} ${response.statusText}`);
-  }
+  window.location.assign(authUrl("/auth/logout"));
 }

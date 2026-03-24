@@ -46,3 +46,13 @@ export const SESSION_COOKIE_NAME = "jarvis.sid";
 export function getFrontendRootUrl() {
   return new URL("/", `${FRONTEND_URL}/`).toString();
 }
+
+
+export const AUTHENTIK_BASE_URL =
+  process.env.AUTHENTIK_BASE_URL ?? "https://auth.jarvis.leongrass.ch";
+
+export const AUTHENTIK_APP_SLUG =
+  process.env.AUTHENTIK_APP_SLUG ?? "jarvis";
+
+export const POST_LOGOUT_REDIRECT_URL =
+  process.env.POST_LOGOUT_REDIRECT_URL ?? "https://jarvis.leongrass.ch";

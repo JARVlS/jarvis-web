@@ -1,7 +1,10 @@
 import { Router } from "express";
 import type { Request } from "express";
 import {
+  AUTHENTIK_APP_SLUG,
+  AUTHENTIK_BASE_URL,
   IS_PRODUCTION,
+  POST_LOGOUT_REDIRECT_URL,
   SESSION_COOKIE_NAME,
   getFrontendRootUrl,
 } from "../env.js";
@@ -85,7 +88,7 @@ router.get("/callback", async (req, res) => {
   }
 });
 
-router.post("/logout", async (req, res) => {
+router.get("/logout", async (req, res) => {
   console.log("Logout requested for user_id =", req.session.auth?.user_id);
   try {
     await destroySession(req);
@@ -95,7 +98,13 @@ router.post("/logout", async (req, res) => {
       sameSite: "lax",
       path: "/",
     });
-    res.status(204).end();
+    const logoutUrl = new URL(
+      `${AUTHENTIK_BASE_URL}/application/o/${AUTHENTIK_APP_SLUG}/end-session/`
+    );
+
+    logoutUrl.searchParams.set("next", POST_LOGOUT_REDIRECT_URL);
+
+    res.redirect(302, logoutUrl.toString());
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Logout failed" });
