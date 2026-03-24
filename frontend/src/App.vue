@@ -230,6 +230,10 @@ async function handleLogout() {
   }
 }
 
+async function handleSettings() {
+  window.open("https://auth.jarvis.leongrass.ch/", "_blank");
+}
+
 onMounted(async () => {
   await refreshCurrentUser();
 
@@ -274,9 +278,14 @@ watch(sessionId, (nextValue) => {
         <p class="auth-copy">
           Signed in as <strong>{{ userLabel }}</strong>
         </p>
-        <button class="auth-button secondary" type="button" @click="handleLogout">
-          Log Out
-        </button>
+        <div class="auth-buttons">
+          <button class="auth-button secondary" type="button" @click="handleLogout">
+            Log Out
+          </button>
+          <button class="auth-button secondary" type="button" @click="handleSettings">
+            Account Settings
+          </button>
+        </div>
       </div>
     </header>
 
@@ -362,6 +371,11 @@ watch(sessionId, (nextValue) => {
   color: var(--color-chat-clear-text);
 }
 
+.auth-buttons{
+  display: flex;
+  gap: 0.5rem;
+}
+
 @media (max-width: 640px) {
   .auth-bar {
     align-items: stretch;
@@ -369,6 +383,9 @@ watch(sessionId, (nextValue) => {
 
   .auth-button.secondary {
     width: 100%;
+  }
+  .auth-buttons {
+    flex-direction: column;
   }
 }
 </style>
