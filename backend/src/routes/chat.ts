@@ -16,7 +16,12 @@ router.post("/", async (req, res) => {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    const result = await sendChat(message, userContext, sessionId);
+    const result = await sendChat(
+      req.body.message,
+      userContext,
+      req.body.conversation_id,
+      req.sessionID,
+    );
     res.json(result);
   } catch (error) {
     console.error(error);
