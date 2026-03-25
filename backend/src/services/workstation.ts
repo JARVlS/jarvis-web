@@ -100,6 +100,59 @@ function signTrustedPayload(rawBody: string, secret: string) {
   return crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
 }
 
+
+function toBase64Url(buffer: Buffer): string {
+  return buffer
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "")
+}
+
+function sha256Hex(input: string): string {
+  return crypto.createHash("sha256").update(input).digest("hex")
+}
+
+function buildSigningInput(params: {
+  method: string
+  path: string
+  contentType: string
+  bodySha256: string
+}): string {
+  // This is the most likely contract based on your Python verifier.
+  // If your Python helper uses a different separator/order, match that exactly.
+  return [
+    params.method.toUpperCase(),
+    params.path,
+    params.contentType,
+    params.bodySha256,
+  ].join("\n")
+}
+
+function signTrustedRequest(params: {
+  secret: string
+  method: string
+  path: string
+  contentType: string
+  rawBody: string
+}): string {
+  const bodySha256 = sha256Hex(params.rawBody)
+
+  const signingInput = buildSigningInput({
+    method: params.method,
+    path: params.path,
+    contentType: params.contentType,
+    bodySha256,
+  })
+
+  const digest = crypto
+    .createHmac("sha256", params.secret)
+    .update(signingInput, "utf8")
+    .digest()
+
+  return toBase64Url(digest)
+}
+
 export async function sendChat(
   message: string,
   userContext: UserContext,
@@ -111,26 +164,32 @@ export async function sendChat(
     userContext,
     conversationId,
     backendSessionId,
-  );
+  )
 
-  const rawBody = JSON.stringify(payload);
+  const rawBody = JSON.stringify(payload)
+  const method = "POST"
+  const path = "/chat"
+  const contentType = "application/json"
 
-  const signature = crypto
-    .createHmac("sha256", process.env.JARVIS_TRUSTED_BACKEND_SECRET!)
-    .update(rawBody)
-    .digest("hex");
+  const signature = signTrustedRequest({
+    secret: process.env.JARVIS_TRUSTED_BACKEND_SECRET!,
+    method,
+    path,
+    contentType,
+    rawBody,
+  })
 
   const response = await fetch(`${WORKSTATION_JARVIS_URL}/chat`, {
-    method: "POST",
+    method,
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": contentType,
       "X-Jarvis-Key-Id": process.env.JARVIS_TRUSTED_BACKEND_KEY_ID!,
       "X-Jarvis-Signature": signature,
     },
     body: rawBody,
-  });
+  })
 
-  const text = await response.text();
+  const text = await response.text()
 
   if (!response.ok) {
     console.error("Jarvis trusted request failed", {
@@ -138,11 +197,11 @@ export async function sendChat(
       status: response.status,
       status_text: response.statusText,
       response_body: text,
-    });
-    throw new Error(`Workstation chat failed: ${response.status}`);
+    })
+    throw new Error(`Workstation chat failed: ${response.status}`)
   }
 
-  return JSON.parse(text);
+  return JSON.parse(text)
 }
 
 export async function getWorkstationHealth() {
