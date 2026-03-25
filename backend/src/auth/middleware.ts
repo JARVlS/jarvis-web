@@ -54,6 +54,7 @@ export function requireScope(requiredScope: string) {
 }
 
 export function requireShortcutSecret(req: Request, res: Response, next: NextFunction) {
+  console.log("Checking shortcut secret for incoming request");
   const auth = req.header("Authorization");
   if (auth !== `Bearer ${process.env.SIRI_SHORTCUT_TOKEN}`) {
     res.status(401).json({ error: "Unauthorized" });
