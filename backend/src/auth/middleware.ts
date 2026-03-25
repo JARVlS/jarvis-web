@@ -52,3 +52,12 @@ export function requireScope(requiredScope: string) {
     next();
   };
 }
+
+export function requireShortcutSecret(req: Request, res: Response, next: NextFunction) {
+  const auth = req.header("Authorization");
+  if (auth !== `Bearer ${process.env.SIRI_SHORTCUT_TOKEN}`) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+  next();
+}

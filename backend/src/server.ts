@@ -16,6 +16,7 @@ import chatRouter from "./routes/chat.js";
 import meRouter from "./routes/me.js";
 import powerRouter from "./routes/power.js";
 import statusRouter from "./routes/status.js";
+import shortCutRouter from "./routes/shortcut.js";
 import { syncToolDefinitions } from "./tools/registry.js";
 
 initializeDatabase();
@@ -53,6 +54,8 @@ apiRouter.use("/status", statusRouter);
 apiRouter.use("/me", meRouter);
 apiRouter.use("/chat", requireScope("chat:use"), chatRouter);
 apiRouter.use("/power", requireScope("power:control"), powerRouter);
+
+apiRouter.use("/shortcut", shortCutRouter);
 
 apiRouter.get("/health", (_req, res) => {
   res.json({ ok: true, service: "jarvis-backend" });
