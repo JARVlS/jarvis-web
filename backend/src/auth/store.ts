@@ -245,6 +245,7 @@ export function getUserContextById(userId: number): UserContext | null {
 
   return {
     user_id: user.id,
+    oidc_sub: user.oidc_sub,
     email: user.email,
     display_name: user.display_name,
     roles,

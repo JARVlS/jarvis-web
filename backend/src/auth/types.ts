@@ -1,5 +1,6 @@
 export interface UserContext {
   user_id: number;
+  oidc_sub: string;
   email: string;
   display_name: string | null;
   roles: string[];
