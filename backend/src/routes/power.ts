@@ -3,6 +3,7 @@ import {
   wakeWorkstation,
   sleepWorkstation,
   shutdownWorkstation,
+  wakePC,
 } from "../services/pi.js";
 
 const router = Router();
@@ -34,6 +35,16 @@ router.post("/shutdown", async (_req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Shutdown failed" });
+  }
+});
+
+router.post("/wake-pc", async (_req, res) => {
+  try {
+    const result = await wakePC();
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Wake PC failed" });
   }
 });
 

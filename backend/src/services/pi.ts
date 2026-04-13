@@ -43,3 +43,6 @@ export function sleepWorkstation() {
 export function shutdownWorkstation() {
   return post("/shutdown");
 }
+export function wakePC() {
+  return post("/wake-pc");
+}
