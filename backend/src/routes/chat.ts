@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 
 router.post("/stream", async (req, res) => {
   try {
-    const { message, sessionId, conversation_id } = req.body;
+    const { message, conversation_id } = req.body;
     const userContext = req.userContext;
 
     if (!message || typeof message !== "string") {
@@ -47,11 +47,11 @@ router.post("/stream", async (req, res) => {
     const payload = buildJarvisChatPayload(
       message,
       userContext,
-      sessionId,
+      req.sessionID,
       conversation_id,
     );
 
-    const pythonResponse = await streamChatFromWorkstation(payload)
+    const pythonResponse = await streamChatFromWorkstation(payload);
 
     if (!pythonResponse.ok || !pythonResponse.body) {
       const errorText = await pythonResponse.text();
@@ -61,13 +61,16 @@ router.post("/stream", async (req, res) => {
     }
 
     res.status(200);
-    res.setHeader("Content-Type", "application/x-ndjson; charset=utf-8");
+    res.setHeader(
+      "Content-Type",
+      pythonResponse.headers.get("content-type") ?? "application/x-ndjson; charset=utf-8",
+    );
     res.setHeader("Cache-Control", "no-cache, no-transform");
     res.setHeader("Connection", "keep-alive");
+    res.setHeader("X-Accel-Buffering", "no");
     res.flushHeaders?.();
 
     const reader = pythonResponse.body.getReader();
-    const decoder = new TextDecoder("utf-8");
 
     req.on("close", () => {
       reader.cancel().catch(() => {});
@@ -77,20 +80,19 @@ router.post("/stream", async (req, res) => {
       const { done, value } = await reader.read();
       if (done) break;
 
-      const chunk = decoder.decode(value, { stream: true });
-      res.write(chunk);
+      res.write(Buffer.from(value));
     }
 
     res.end();
 
 
   } catch (error) {
-    console.error("Chat stream failed:", error)
+    console.error("Chat stream failed:", error);
 
     if (!res.headersSent) {
-      res.status(500).json({ error: "Chat stream failed" })
+      res.status(500).json({ error: "Chat stream failed" });
     } else {
-      res.end()
+      res.end();
     }
   }
 });

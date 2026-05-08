@@ -155,6 +155,14 @@ function normalizeStreamLine(line: string): string | null {
     return null;
   }
 
+  if (trimmed.startsWith(":")) {
+    return null;
+  }
+
+  if (trimmed.startsWith("event:") || trimmed.startsWith("id:") || trimmed.startsWith("retry:")) {
+    return null;
+  }
+
   if (trimmed.startsWith("data:")) {
     return trimmed.slice(5).trim();
   }
