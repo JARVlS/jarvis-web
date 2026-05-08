@@ -40,8 +40,7 @@ export interface ChatStreamEvent {
 }
 
 export interface ChatStreamResult {
-  events: ChatStreamEvent[];
-  finalText?: string;
+  finalText: string;
   sessionId?: string;
 }
 

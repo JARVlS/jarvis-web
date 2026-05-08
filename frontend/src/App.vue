@@ -98,7 +98,7 @@ onMounted(() => {
       </ErrorBanner>
 
       <ChatPanel
-        :messages="chat.chatHistory.value"
+        :messages="chat.messages.value"
         :disabled="!workstation.workstationOnline.value"
         :loading="chat.chatLoading.value"
         @send="chat.sendMessage"

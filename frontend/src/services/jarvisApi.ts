@@ -2,7 +2,6 @@ import { apiUrl, authUrl } from "../config/api";
 import type {
   ChatStreamEvent,
   ChatStreamResult,
-  ChatResponse,
   CurrentUserResponse,
   PowerAction,
   StatusResponse,
@@ -15,22 +14,6 @@ function getErrorMessage(body: unknown): string | undefined {
 
   const maybeError = (body as { error?: unknown }).error;
   return typeof maybeError === "string" ? maybeError : undefined;
-}
-
-async function postJson<T>(path: string, payload?: unknown): Promise<T> {
-  const response = await fetch(apiUrl(path), {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: payload ? JSON.stringify(payload) : undefined,
-  });
-
-  const body = (await response.json().catch(() => null)) as unknown;
-  if (!response.ok) {
-    throw new Error(getErrorMessage(body) ?? `${response.status} ${response.statusText}`);
-  }
-
-  return body as T;
 }
 
 async function getResponseError(response: Response): Promise<string> {
@@ -183,10 +166,6 @@ export async function fetchStatus(): Promise<StatusResponse> {
   return (body ?? {}) as StatusResponse;
 }
 
-export function sendChatMessage(message: string, sessionId?: string) {
-  return postJson<ChatResponse>("/chat", { message, sessionId });
-}
-
 export async function streamChatMessage(
   message: string,
   options: {
@@ -217,11 +196,10 @@ export async function streamChatMessage(
     throw new Error("Chat stream response body was empty.");
   }
 
-  const result: ChatStreamResult = {
-    events: [],
-  };
   const reader = response.body.getReader();
   const decoder = new TextDecoder("utf-8");
+  let finalText = "";
+  let latestSessionId = options.sessionId;
   let buffer = "";
 
   const handleLine = (line: string) => {
@@ -234,7 +212,7 @@ export async function streamChatMessage(
     try {
       parsed = JSON.parse(normalized);
     } catch {
-      result.finalText = `${result.finalText ?? ""}${normalized}`;
+      finalText += normalized;
       options.onTextDelta?.(normalized);
       return;
     }
@@ -244,7 +222,6 @@ export async function streamChatMessage(
     }
 
     const event = parsed as ChatStreamEvent;
-    result.events.push(event);
 
     const eventError = getErrorMessage(event);
     if (eventError) {
@@ -253,19 +230,20 @@ export async function streamChatMessage(
 
     const nextSessionId = extractStreamSessionId(event);
     if (nextSessionId) {
-      result.sessionId = nextSessionId;
+      latestSessionId = nextSessionId;
       options.onSessionId?.(nextSessionId);
     }
 
     const replacementText = extractStreamFullText(event);
     if (replacementText !== undefined) {
-      result.finalText = replacementText;
+      finalText = replacementText;
       options.onText?.(replacementText);
+      return;
     }
 
     const deltaText = extractStreamTextDelta(event);
     if (deltaText) {
-      result.finalText = `${result.finalText ?? ""}${deltaText}`;
+      finalText += deltaText;
       options.onTextDelta?.(deltaText);
     }
   };
@@ -276,9 +254,7 @@ export async function streamChatMessage(
       break;
     }
 
-    const decodedChunk = decoder.decode(value, { stream: true });
-    console.log("[jarvis stream][frontend chunk]", decodedChunk);
-    buffer += decodedChunk;
+    buffer += decoder.decode(value, { stream: true });
     const lines = buffer.split(/\r?\n/);
     buffer = lines.pop() ?? "";
 
@@ -292,11 +268,24 @@ export async function streamChatMessage(
     handleLine(buffer);
   }
 
-  return result;
+  return {
+    finalText,
+    sessionId: latestSessionId,
+  };
 }
 
 export function sendPowerAction(action: PowerAction) {
-  return postJson<Record<string, unknown>>(`/power/${action}`);
+  return fetch(apiUrl(`/power/${action}`), {
+    method: "POST",
+    credentials: "include",
+  }).then(async (response) => {
+    const body = (await response.json().catch(() => null)) as unknown;
+    if (!response.ok) {
+      throw new Error(getErrorMessage(body) ?? `${response.status} ${response.statusText}`);
+    }
+
+    return body as Record<string, unknown>;
+  });
 }
 
 export async function fetchCurrentUser(): Promise<CurrentUserResponse | null> {

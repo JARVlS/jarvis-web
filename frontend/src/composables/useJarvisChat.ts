@@ -1,11 +1,6 @@
-import { onBeforeUnmount, ref, watch, type Ref } from "vue";
+import { computed, onBeforeUnmount, ref, watch, type Ref } from "vue";
 import { streamChatMessage } from "../services/jarvisApi";
-import type {
-  ChatMessage,
-  ChatRole,
-  ChatStreamEvent,
-  ChatStreamResult,
-} from "../types/jarvis";
+import type { ChatMessage, ChatRole } from "../types/jarvis";
 
 const CHAT_HISTORY_KEY = "jarvis.chatHistory.v1";
 const CHAT_SESSION_KEY = "jarvis.chatSession.v1";
@@ -40,58 +35,36 @@ function isStoredChatMessage(entry: unknown): entry is ChatMessage {
   );
 }
 
-function extractFallbackText(event: ChatStreamEvent): string | undefined {
-  const candidates = ["reply_text", "reply", "message", "content", "text"] as const;
-  for (const key of candidates) {
-    const value = event[key];
-    if (typeof value === "string" && value.length > 0) {
-      return value;
-    }
-  }
-
-  return undefined;
-}
-
-function extractResultText(result: ChatStreamResult): string | undefined {
-  if (result.finalText?.trim()) {
-    return result.finalText;
-  }
-
-  for (const event of [...result.events].reverse()) {
-    const text = extractFallbackText(event);
-    if (text?.trim()) {
-      return text;
-    }
-  }
-
-  return undefined;
+function createMessage(role: ChatRole, content: string): ChatMessage {
+  return {
+    id: messageId(),
+    role,
+    content,
+    createdAt: new Date().toISOString(),
+  };
 }
 
 export function useJarvisChat(options: UseJarvisChatOptions) {
   const chatHistory = ref<ChatMessage[]>([]);
   const chatLoading = ref(false);
   const sessionId = ref<string>();
+  const streamingAssistantMessage = ref<ChatMessage | null>(null);
+  const messages = computed(() =>
+    streamingAssistantMessage.value
+      ? [...chatHistory.value, streamingAssistantMessage.value]
+      : chatHistory.value,
+  );
 
   let streamController: AbortController | null = null;
 
   function addMessage(role: ChatRole, content: string) {
-    const message: ChatMessage = {
-      id: messageId(),
-      role,
-      content,
-      createdAt: new Date().toISOString(),
-    };
-
+    const message = createMessage(role, content);
     chatHistory.value.push(message);
     return message;
   }
 
   function addSystemMessage(content: string) {
     addMessage("system", content);
-  }
-
-  function removeMessage(id: string) {
-    chatHistory.value = chatHistory.value.filter((entry) => entry.id !== id);
   }
 
   function hydrateStoredChat() {
@@ -116,12 +89,14 @@ export function useJarvisChat(options: UseJarvisChatOptions) {
   function clearHistory() {
     chatHistory.value = [];
     sessionId.value = undefined;
+    streamingAssistantMessage.value = null;
   }
 
   function reset() {
     streamController?.abort();
     streamController = null;
     chatLoading.value = false;
+    streamingAssistantMessage.value = null;
     clearHistory();
   }
 
@@ -135,7 +110,7 @@ export function useJarvisChat(options: UseJarvisChatOptions) {
     chatLoading.value = true;
 
     addMessage("user", trimmedMessage);
-    const assistantMessage = addMessage("assistant", "");
+    streamingAssistantMessage.value = createMessage("assistant", "");
     const controller = new AbortController();
     streamController = controller;
 
@@ -147,26 +122,31 @@ export function useJarvisChat(options: UseJarvisChatOptions) {
           sessionId.value = nextSessionId;
         },
         onText: (text) => {
-          assistantMessage.content = text;
+          if (streamingAssistantMessage.value) {
+            streamingAssistantMessage.value.content = text;
+          }
         },
         onTextDelta: (delta) => {
-          assistantMessage.content += delta;
+          if (streamingAssistantMessage.value) {
+            streamingAssistantMessage.value.content += delta;
+          }
         },
       });
 
-      if (!assistantMessage.content.trim()) {
-        const fallbackText = extractResultText(result);
-        if (fallbackText) {
-          assistantMessage.content = fallbackText;
-        }
+      const finalText = streamingAssistantMessage.value?.content.trim()
+        ? streamingAssistantMessage.value.content
+        : result.finalText.trim();
+
+      streamingAssistantMessage.value = null;
+
+      if (!finalText) {
+        addSystemMessage("Assistant returned no reply.");
+        return;
       }
 
-      if (!assistantMessage.content.trim()) {
-        removeMessage(assistantMessage.id);
-        addSystemMessage("Assistant returned no reply.");
-      }
+      addMessage("assistant", finalText);
     } catch (error) {
-      removeMessage(assistantMessage.id);
+      streamingAssistantMessage.value = null;
 
       if (isAbortError(error)) {
         return;
@@ -216,6 +196,7 @@ export function useJarvisChat(options: UseJarvisChatOptions) {
     chatLoading,
     clearHistory,
     hydrateStoredChat,
+    messages,
     reset,
     sendMessage,
     sessionId,
