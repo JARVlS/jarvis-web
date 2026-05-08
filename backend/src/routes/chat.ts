@@ -80,6 +80,7 @@ router.post("/stream", async (req, res) => {
       const { done, value } = await reader.read();
       if (done) break;
 
+      console.log("[jarvis stream][backend chunk]", Buffer.from(value).toString("utf8"));
       res.write(Buffer.from(value));
     }
 

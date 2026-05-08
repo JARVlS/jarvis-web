@@ -276,7 +276,9 @@ export async function streamChatMessage(
       break;
     }
 
-    buffer += decoder.decode(value, { stream: true });
+    const decodedChunk = decoder.decode(value, { stream: true });
+    console.log("[jarvis stream][frontend chunk]", decodedChunk);
+    buffer += decodedChunk;
     const lines = buffer.split(/\r?\n/);
     buffer = lines.pop() ?? "";
 
