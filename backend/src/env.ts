@@ -56,3 +56,8 @@ export const AUTHENTIK_APP_SLUG =
 
 export const POST_LOGOUT_REDIRECT_URL =
   process.env.POST_LOGOUT_REDIRECT_URL ?? "https://jarvis.leongrass.ch";
+
+export const JARVIS_TRUSTED_BACKEND_SECRET = readStringEnv(
+  "JARVIS_TRUSTED_BACKEND_SECRET",
+  "replace-me",
+);

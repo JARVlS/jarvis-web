@@ -1,5 +1,7 @@
 import { Router } from "express";
-import { sendChat } from "../services/workstation.js";
+import { sendChat, buildJarvisChatPayload, streamChatFromWorkstation } from "../services/workstation.js";
+import type { UserContext } from "../auth/types.js";
+
 
 const router = Router();
 
@@ -29,4 +31,67 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/stream", async (req, res) => {
+  try {
+    const { message, sessionId, conversation_id } = req.body;
+    const userContext = req.userContext;
+
+    if (!message || typeof message !== "string") {
+      return res.status(400).json({ error: "message is required" });
+    }
+
+    if (!userContext) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+
+    const payload = buildJarvisChatPayload(
+      message,
+      userContext,
+      sessionId,
+      conversation_id,
+    );
+
+    const pythonResponse = await streamChatFromWorkstation(payload)
+
+    if (!pythonResponse.ok || !pythonResponse.body) {
+      const errorText = await pythonResponse.text();
+
+      res.status(pythonResponse.status).json({ error: `Chat stream request failed: ${errorText}` });
+      return;
+    }
+
+    res.status(200);
+    res.setHeader("Content-Type", "application/x-ndjson; charset=utf-8");
+    res.setHeader("Cache-Control", "no-cache, no-transform");
+    res.setHeader("Connection", "keep-alive");
+    res.flushHeaders?.();
+
+    const reader = pythonResponse.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    req.on("close", () => {
+      reader.cancel().catch(() => {});
+    });
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+      res.write(chunk);
+    }
+
+    res.end();
+
+
+  } catch (error) {
+    console.error("Chat stream failed:", error)
+
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Chat stream failed" })
+    } else {
+      res.end()
+    }
+  }
+});
 export default router;

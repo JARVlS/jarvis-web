@@ -35,7 +35,10 @@ function handleClear() {
 }
 
 watch(
-  () => props.messages.length,
+  () =>
+    props.messages
+      .map((entry) => `${entry.id}:${entry.content.length}:${entry.createdAt}`)
+      .join("|"),
   async () => {
     await nextTick();
     historyEl.value?.scrollTo({
@@ -75,7 +78,7 @@ watch(
         :disabled="disabled || loading"
       />
       <button type="submit" class="send-button" :disabled="!canSend">
-        {{ loading ? "Sending..." : "Send" }}
+        {{ loading ? "Streaming..." : "Send" }}
       </button>
     </form>
 

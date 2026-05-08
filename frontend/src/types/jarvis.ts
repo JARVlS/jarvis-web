@@ -35,6 +35,16 @@ export interface ChatResponse {
   [key: string]: unknown;
 }
 
+export interface ChatStreamEvent {
+  [key: string]: unknown;
+}
+
+export interface ChatStreamResult {
+  events: ChatStreamEvent[];
+  finalText?: string;
+  sessionId?: string;
+}
+
 export interface CurrentUser {
   user_id: number;
   email: string;
