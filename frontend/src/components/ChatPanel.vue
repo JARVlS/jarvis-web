@@ -75,7 +75,7 @@ watch(
         class="chat-input"
         type="text"
         placeholder="Type a message for JARVIS..."
-        :disabled="disabled || loading"
+        :disabled="disabled"
       />
       <button type="submit" class="send-button" :disabled="!canSend">
         {{ loading ? "Streaming..." : "Send" }}

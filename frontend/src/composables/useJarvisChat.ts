@@ -12,12 +12,16 @@ interface UseJarvisChatOptions {
   onUiError: (message: string) => void;
 }
 
-function messageId() {
+function generateUUID(): string {
   if (typeof crypto.randomUUID === "function") {
     return crypto.randomUUID();
   }
 
-  return `msg-${Date.now()}-${Math.floor(Math.random() * 10_000)}`;
+  return `${Date.now()}-${Math.floor(Math.random() * 10_000)}`;
+}
+
+function messageId() {
+  return generateUUID();
 }
 
 function isAbortError(error: unknown): boolean {
@@ -83,12 +87,14 @@ export function useJarvisChat(options: UseJarvisChatOptions) {
     const rawSession = localStorage.getItem(CHAT_SESSION_KEY);
     if (rawSession) {
       sessionId.value = rawSession;
+    } else {
+      sessionId.value = generateUUID();
     }
   }
 
   function clearHistory() {
     chatHistory.value = [];
-    sessionId.value = undefined;
+    sessionId.value = generateUUID();
     streamingAssistantMessage.value = null;
   }
 
